@@ -37,7 +37,7 @@ namespace Icebreaker.Helpers.AdaptiveCards
             // Guest users may not have their given name specified in AAD, so fall back to the full name if needed
             var senderGivenName = string.IsNullOrEmpty(sender.GivenName) ? sender.Name : sender.GivenName;
             var recipient1GivenName = string.IsNullOrEmpty(recipient1.GivenName) ? recipient1.Name : recipient1.GivenName;
-             var recipient2GivenName = string.IsNullOrEmpty(recipient2.GivenName) ? recipient2.Name : recipient2.GivenName;
+            var recipient2GivenName = string.IsNullOrEmpty(recipient2.GivenName) ? recipient2.Name : recipient2.GivenName;
 
             // To start a chat with a guest user, use their external email, not the UPN
             var recipient1Upn = !IsGuestUser(recipient1) ? recipient1.UserPrincipalName : recipient1.Email;
@@ -57,7 +57,7 @@ namespace Icebreaker.Helpers.AdaptiveCards
                 chatWithMessageGreeting = Resources.ChatWithMessageGreeting,
                 pauseMatchesButtonText = Resources.PausePairingsButtonText,
                 proposeMeetupButtonText = Resources.ProposeMeetupButtonText,
-                personUpn = recipientUpn,
+                personUpn = recipient1Upn + ";" + recipient2Upn,
                 meetingLink,
             };
 
