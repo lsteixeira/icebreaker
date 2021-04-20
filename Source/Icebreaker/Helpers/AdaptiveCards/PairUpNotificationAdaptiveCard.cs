@@ -32,26 +32,28 @@ namespace Icebreaker.Helpers.AdaptiveCards
         /// <param name="recipient">The user who will be receiving this card.</param>
         /// <param name="botDisplayName">The bot display name.</param>
         /// <returns>Pairup notification card</returns>
-        public static Attachment GetCard(string teamName, TeamsChannelAccount sender, TeamsChannelAccount recipient, string botDisplayName)
+        public static Attachment GetCard(string teamName, TeamsChannelAccount sender, TeamsChannelAccount recipient1, TeamsChannelAccount recipient2, string botDisplayName)
         {
             // Guest users may not have their given name specified in AAD, so fall back to the full name if needed
             var senderGivenName = string.IsNullOrEmpty(sender.GivenName) ? sender.Name : sender.GivenName;
-            var recipientGivenName = string.IsNullOrEmpty(recipient.GivenName) ? recipient.Name : recipient.GivenName;
+            var recipient1GivenName = string.IsNullOrEmpty(recipient1.GivenName) ? recipient1.Name : recipient1.GivenName;
+             var recipient2GivenName = string.IsNullOrEmpty(recipient2.GivenName) ? recipient2.Name : recipient2.GivenName;
 
             // To start a chat with a guest user, use their external email, not the UPN
-            var recipientUpn = !IsGuestUser(recipient) ? recipient.UserPrincipalName : recipient.Email;
+            var recipient1Upn = !IsGuestUser(recipient1) ? recipient1.UserPrincipalName : recipient1.Email;
+            var recipient2Upn = !IsGuestUser(recipient2) ? recipient2.UserPrincipalName : recipient2.Email;
 
-            var meetingTitle = string.Format(Resources.MeetupTitle, senderGivenName, recipientGivenName);
+            var meetingTitle = string.Format(Resources.MeetupTitle, senderGivenName, recipient1GivenName, recipient2GivenName);
             var meetingContent = string.Format(Resources.MeetupContent, botDisplayName);
-            var meetingLink = "https://teams.microsoft.com/l/meeting/new?subject=" + Uri.EscapeDataString(meetingTitle) + "&attendees=" + recipientUpn + "&content=" + Uri.EscapeDataString(meetingContent);
+            var meetingLink = "https://teams.microsoft.com/l/meeting/new?subject=" + Uri.EscapeDataString(meetingTitle) + "&attendees=" + recipient1Upn + ";" + recipient2Upn + "&content=" + Uri.EscapeDataString(meetingContent);
 
             var cardData = new
             {
                 matchUpCardTitleContent = Resources.MatchUpCardTitleContent,
-                matchUpCardMatchedText = string.Format(Resources.MatchUpCardMatchedText, recipient.Name),
-                matchUpCardContentPart1 = string.Format(Resources.MatchUpCardContentPart1, botDisplayName, teamName, recipient.Name),
+                matchUpCardMatchedText = string.Format(Resources.MatchUpCardMatchedText, recipient1.Name, recipient2.Name),
+                matchUpCardContentPart1 = string.Format(Resources.MatchUpCardContentPart1, botDisplayName, teamName, recipient1.Name, recipient2.Name),
                 matchUpCardContentPart2 = Resources.MatchUpCardContentPart2,
-                chatWithMatchButtonText = string.Format(Resources.ChatWithMatchButtonText, recipientGivenName),
+                chatWithMatchButtonText = string.Format(Resources.ChatWithMatchButtonText, recipient1GivenName, recipient2GivenName),
                 chatWithMessageGreeting = Resources.ChatWithMessageGreeting,
                 pauseMatchesButtonText = Resources.PausePairingsButtonText,
                 proposeMeetupButtonText = Resources.ProposeMeetupButtonText,

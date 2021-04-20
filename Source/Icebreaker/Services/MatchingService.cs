@@ -84,7 +84,7 @@ namespace Icebreaker.Services
                 foreach (var team in teams)
                 {
                     this.telemetryClient.TrackTrace($"Pairing members of team {team.Id}");
-
+                    
                     try
                     {
                         var teamName = await this.conversationHelper.GetTeamNameByIdAsync(this.botAdapter, team);
@@ -131,23 +131,29 @@ namespace Icebreaker.Services
         /// <param name="pair">The pairup</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Number of users notified successfully</returns>
-        private async Task<int> NotifyPairAsync(TeamInstallInfo teamModel, string teamName, Tuple<ChannelAccount, ChannelAccount> pair, CancellationToken cancellationToken)
+        private async Task<int> NotifyPairAsync(TeamInstallInfo teamModel, string teamName, Tuple<ChannelAccount, ChannelAccount, ChannelAccount> pair, CancellationToken cancellationToken)
         {
-            this.telemetryClient.TrackTrace($"Sending pairup notification to {pair.Item1.Id} and {pair.Item2.Id}");
+            this.telemetryClient.TrackTrace($"Sending pairup notification to {pair.Item1.Id}, {pair.Item2.Id} and {pair.Item3.Id}");
 
             var teamsPerson1 = JObject.FromObject(pair.Item1).ToObject<TeamsChannelAccount>();
             var teamsPerson2 = JObject.FromObject(pair.Item2).ToObject<TeamsChannelAccount>();
+            var teamsPerson3 = JObject.FromObject(pair.Item3).ToObject<TeamsChannelAccount>();
 
             // Fill in person2's info in the card for person1
-            var cardForPerson1 = PairUpNotificationAdaptiveCard.GetCard(teamName, teamsPerson1, teamsPerson2, this.botDisplayName);
+            var cardForPerson1 = PairUpNotificationAdaptiveCard.GetCard(teamName, teamsPerson1, teamsPerson2, teamsPerson3, this.botDisplayName);
 
             // Fill in person1's info in the card for person2
-            var cardForPerson2 = PairUpNotificationAdaptiveCard.GetCard(teamName, teamsPerson2, teamsPerson1, this.botDisplayName);
+            var cardForPerson2 = PairUpNotificationAdaptiveCard.GetCard(teamName, teamsPerson2, teamsPerson1, teamsPerson3, this.botDisplayName);
+
+            // Fill in person1's info in the card for person3
+            var cardForPerson3 = PairUpNotificationAdaptiveCard.GetCard(teamName, teamsPerson3, teamsPerson1, teamsPerson2, this.botDisplayName);
+
 
             // Send notifications and return the number that was successful
             var notifyResults = await Task.WhenAll(
                 this.conversationHelper.NotifyUserAsync(this.botAdapter, teamModel.ServiceUrl, teamModel.TeamId, MessageFactory.Attachment(cardForPerson1), teamsPerson1, teamModel.TenantId, cancellationToken),
-                this.conversationHelper.NotifyUserAsync(this.botAdapter, teamModel.ServiceUrl, teamModel.TeamId, MessageFactory.Attachment(cardForPerson2), teamsPerson2, teamModel.TenantId, cancellationToken));
+                this.conversationHelper.NotifyUserAsync(this.botAdapter, teamModel.ServiceUrl, teamModel.TeamId, MessageFactory.Attachment(cardForPerson2), teamsPerson2, teamModel.TenantId, cancellationToken),
+                this.conversationHelper.NotifyUserAsync(this.botAdapter, teamModel.ServiceUrl, teamModel.TeamId, MessageFactory.Attachment(cardForPerson3), teamsPerson3, teamModel.TenantId, cancellationToken));
             return notifyResults.Count(wasNotified => wasNotified);
         }
 
@@ -191,21 +197,23 @@ namespace Icebreaker.Services
         /// <returns>List of pairs</returns>
         private List<Tuple<ChannelAccount, ChannelAccount>> MakePairs(List<ChannelAccount> users)
         {
-            if (users.Count > 1)
+            if (users.Count > 2)
             {
-                this.telemetryClient.TrackTrace($"Making {users.Count / 2} pairs among {users.Count} users");
+                this.telemetryClient.TrackTrace($"Making {users.Count / 3} pairs among {users.Count} users");
             }
             else
             {
-                this.telemetryClient.TrackTrace($"Pairs could not be made because there is only 1 user in the team");
+                this.telemetryClient.TrackTrace($"Pairs could not be made because there is less than 2 user in the team");
             }
 
             this.Randomize(users);
 
-            var pairs = new List<Tuple<ChannelAccount, ChannelAccount>>();
-            for (int i = 0; i < users.Count - 1; i += 2)
+            var pairs = new List<Tuple<ChannelAccount, ChannelAccount, ChannelAccount>>();
+            for (int i = 0; i < users.Count - 1; i += 3)
             {
-                pairs.Add(new Tuple<ChannelAccount, ChannelAccount>(users[i], users[i + 1]));
+                if((i + 2) < users.Count){
+                    pairs.Add(new Tuple<ChannelAccount, ChannelAccount, ChannelAccount>(users[i], users[i + 1], users[i + 2]));
+                }
             }
 
             return pairs;
