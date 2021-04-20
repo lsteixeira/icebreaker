@@ -195,7 +195,7 @@ namespace Icebreaker.Services
         /// </summary>
         /// <param name="users">Users accounts</param>
         /// <returns>List of pairs</returns>
-        private List<Tuple<ChannelAccount, ChannelAccount>> MakePairs(List<ChannelAccount> users)
+        private List<Tuple<ChannelAccount, ChannelAccount, ChannelAccount>> MakePairs(List<ChannelAccount> users)
         {
             if (users.Count > 2)
             {
