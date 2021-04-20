@@ -162,27 +162,27 @@
     <comment>Part 3 of the install message when the name of the installer is not known</comment>
   </data>
   <data name="MatchUpCardContentPart1" xml:space="preserve">
-    <value>Hi there again, I'm {0} in {1}. A bot that pairs you with a new coworker to meet each week. This week your match is {2} and {3}.</value>
+    <value>Hi there again, I'm {0} in {1} team. A bot that pairs you with a couple CTW coleagues for you all to meet and share some ideas. This week I suggested **{2}** and **{3}** as your virtual coffee friends.</value>
     <comment>First part of the match up card main content</comment>
   </data>
   <data name="MatchUpCardContentPart2" xml:space="preserve">
-    <value>If you've got the inclination, set something up. See, meeting people *is* easy!</value>
+    <value>Let's do this and have a break! Let's share some ideas about our product and teams, latest news from CTW and nice options for the weekend!</value>
     <comment>Second part of the match up card main content</comment>
   </data>
   <data name="MatchUpCardMatchedText" xml:space="preserve">
-    <value>You've been matched with {0} and {1}.</value>
+    <value>We've selected You, **{0}** and **{1}** for a virtual coffee.</value>
     <comment>The text saying who the user has been matched up with</comment>
   </data>
   <data name="MatchUpCardTitleContent" xml:space="preserve">
-    <value>It's time for a match!</value>
+    <value>It's time for a Break! Share a cup of coffee with some CTW coleagues!</value>
     <comment>The title text for the pairup notification adaptive card</comment>
   </data>
   <data name="MeetupContent" xml:space="preserve">
-    <value>Hey there, looks like we've been matched by {0} this week. It'd be great to meet up for a coffee or a lunch or a call if you've got time.</value>
+    <value>Hey there, looks like we've been selected by {0} this week, for a virtual coffee. It'd be great to meet up for a virtual coffee in Microsoft Teams call if you've got time.</value>
     <comment>Content of the Meetup for the propose meeting</comment>
   </data>
   <data name="MeetupTitle" xml:space="preserve">
-    <value>{0} / {1} / {2} Meet up</value>
+    <value>{0} / {1} / {2} Virtual Coffee</value>
     <comment>The title for the Meetup - {0} is the name of the first person that user has been matched with and {1} is the name of the user</comment>
   </data>
   <data name="NextButtonText" xml:space="preserve">
