@@ -20,7 +20,7 @@
         "appName": {
             "type": "string",
             "minLength": 1,
-            "defaultValue": "Icebreaker",
+            "defaultValue": "CTW-Icebreaker",
             "metadata": {
                 "description": "The app name to use for the resources that will be provisioned."
             }
@@ -45,7 +45,7 @@
         "appIconUrl": {
             "type": "string",
             "minLength": 1,
-            "defaultValue": "https://raw.githubusercontent.com/OfficeDev/microsoft-teams-icebreaker-app/main/Manifest/color.png",
+            "defaultValue": "https://raw.githubusercontent.com/lsteixeira/icebreaker/main/Manifest/color.png",
             "metadata": {
                 "description": "The link to the icon for the bot. It must resolve to a PNG file."
             }
@@ -118,7 +118,7 @@
         "pairingTimeZone": {
             "type":"string",
             "minLength": 1,
-            "defaultValue": "Pacific Standard Time",
+            "defaultValue": "GMT Standard Time",
             "metadata": {
                 "description": "The time zone for the hour at which pairings are created."
             }
@@ -140,7 +140,7 @@
               "Standard",
               "Premium"
             ],
-            "defaultValue": "Standard",
+            "defaultValue": "Free",
             "metadata": {
               "description": "The pricing tier for the hosting plan."
             }
@@ -168,7 +168,7 @@
         "gitRepoUrl": {
             "type": "string",
             "minLength": 1,
-            "defaultValue": "https://github.com/OfficeDev/microsoft-teams-icebreaker-app.git",
+            "defaultValue": "https://github.com/lsteixeira/icebreaker.git",
             "metadata": {
               "description": "The URL to the GitHub repository to deploy."
             }
